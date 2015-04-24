@@ -75,32 +75,6 @@ User.find()
 .exec(function(err, results) {});
 ```
 
-##### .populate()
-
-`populate` is used with associations to include any related values specified in a model definition.
-If a `collection` attribute is defined in a many-to-many, one-to-many or many-to-many-through
-association is defined the `populate` option also accepts a full criteria object. This allows you
-to filter associations and run `limit` and `skip` on the results.
-
-|     Description     | Accepted Data Types | Required ? |
-|---------------------|---------------------|------------|
-|  Attribute Name     |      `string`       | Yes        |
-|  Criteria Object    |      `{}`           | No         |
-
-```javascript
-// Simple Population
-User.find()
-.populate('foo')
-.exec(function(err, users) {});
-```
-
-```javascript
-// Collection Filtering
-User.find()
-.populate('foo', { type: 'bar', limit: 20 })
-.exec(function(err, users) {});
-```
-
 ##### .limit()
 
 `limit` will restrict the number of records returned by the query.
@@ -167,6 +141,41 @@ sort, or specify an `asc` or `desc` flag for ascending or descending orders resp
 User.find()
 .sort('roleId asc')
 .sort({ createdAt: 'desc' })
+.exec(function(err, users) {});
+```
+
+##### .populate()
+
+`populate` is used with associations to include any related values specified in a model definition.
+If a `collection` attribute is defined in a many-to-many, one-to-many or many-to-many-through
+association is defined the `populate` option also accepts a full criteria object. This allows you
+to filter associations and run `limit` and `skip` on the results.
+
+|     Description     | Accepted Data Types | Required ? |
+|---------------------|---------------------|------------|
+|  Attribute Name     |      `string`       | Yes        |
+|  Criteria Object    |      `{}`           | No         |
+
+```javascript
+// Simple Population
+User.find()
+.populate('foo')
+.exec(function(err, users) {});
+```
+
+```javascript
+// Collection Filtering
+User.find()
+.populate('friends', { type: 'close_friend', age: { '>' : 20 } })
+.exec(function(err, users) {});
+```
+
+You can also use some of the functionalities details above, like `sort`, `skip`, and `limit`:
+
+```javascript
+// Collection Paginating and Sorting
+User.find()
+.populate('posts', {limit: 20, skip: 10, sort : 'createdAt ASC'})
 .exec(function(err, users) {});
 ```
 
